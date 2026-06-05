@@ -27,3 +27,5 @@ terraform.rc
 # Sensitive environment files
 .env
 .env.*
+
+.terraform.lock.hcl

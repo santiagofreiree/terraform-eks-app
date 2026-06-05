@@ -45,6 +45,8 @@ resource "aws_eks_addon" "coredns" {
   addon_name                  = "coredns"
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
+
+  depends_on = [aws_eks_node_group.main]
 }
 
 resource "aws_eks_addon" "kube_proxy" {
@@ -52,6 +54,8 @@ resource "aws_eks_addon" "kube_proxy" {
   addon_name                  = "kube-proxy"
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
+
+  depends_on = [aws_eks_node_group.main]
 }
 
 resource "aws_eks_addon" "ebs_csi" {
@@ -64,6 +68,7 @@ resource "aws_eks_addon" "ebs_csi" {
   depends_on = [
     aws_iam_role_policy_attachment.ebs_csi,
     aws_iam_openid_connect_provider.eks,
+    aws_eks_node_group.main,
   ]
 }
 
@@ -73,7 +78,7 @@ resource "aws_eks_node_group" "main" {
   node_group_name = "dep-node-group"
   node_role_arn   = aws_iam_role.node.arn
   subnet_ids      = [aws_subnet.private_a.id, aws_subnet.private_b.id]
-  instance_types  = ["t3.medium"]
+  instance_types  = ["c7i-flex.large"]
   disk_size       = 40
 
   scaling_config {
