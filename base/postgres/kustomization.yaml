@@ -1,0 +1,7 @@
+resources:
+- postgresql-configmap.yaml
+- postgresql-secrets.yaml
+- postgresql-configmap-conf.yaml
+- postgresql-pvc.yaml
+- postgresql-statefulset.yaml
+- postgresql-service.yaml

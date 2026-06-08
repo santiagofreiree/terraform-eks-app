@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config-conf
+  namespace: development
+data:
+  postgresql.conf: |
+    listen_addresses = '*'
+    max_connections = 150
+    # Memory settings (tuned for 2Gi pod limit)
+    shared_buffers = 512MB
+    effective_cache_size = 1.5GB
+    work_mem = 32MB
+    maintenance_work_mem = 128MB
+    wal_buffers = 16MB
+    checkpoint_completion_target = 0.9

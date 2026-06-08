@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+  namespace: development
+spec:
+  serviceName: "db"
+  replicas: 1 # Increase this if you have a multi-master setup
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      securityContext:
+        runAsUser: 26
+        runAsGroup: 26
+        fsGroup: 26
+        runAsNonRoot: true
+      imagePullSecrets:
+        - name: gitlab-secret
+      initContainers:
+      - name: fixperm
+        image: busybox:1.28
+        command:
+        - sh
+        - -c
+        - if [ -d "/mnt/pgdata" ]; then chmod 700 /mnt/pgdata; fi
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /mnt
+      containers:
+      - name: postgres
+        securityContext:
+          allowPrivilegeEscalation: false
+#          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        image: registry.gitlab.com/santiagofreiree/sysmarket/postgresql-sysmarket-srv:1.8.12
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: PGDATA
+          value: /var/lib/pgsql/data/pgdata
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secrets
+              key: POSTGRES_PASSWORD
+        envFrom:
+          - configMapRef:
+              name: postgresql-config
+        # Mount the custom config
+        volumeMounts:
+        - name: postgres-config
+          mountPath: /etc/postgresql/postgresql.conf
+          subPath: postgresql.conf
+        - name: postgres-data
+          mountPath: /var/lib/pgsql/data
+        # Apply the resource recommendations
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "2000m"
+            memory: "2Gi"
+      volumes:
+      - name: postgres-config
+        configMap:
+          name: postgres-config-conf
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: pvc-postrgres
+#        hostPath: 
+#          path: /datadir

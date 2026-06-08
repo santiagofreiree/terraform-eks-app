@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  LANG: es_ES.UTF-8
+  POSTGRES_DB: dula01
+  POSTGRES_DB2: facturacion
+  POSTGRES_USER: odoo
+  POSTGRES_USER2: facturacion
+kind: ConfigMap
+metadata:
+  name: postgresql-config
+  namespace: development
