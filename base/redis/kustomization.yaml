@@ -1,0 +1,4 @@
+resources:
+- redis-secrets.yaml
+- redis-service.yaml
+- redis.yaml

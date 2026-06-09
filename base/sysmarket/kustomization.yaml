@@ -1,0 +1,6 @@
+resources:
+- sysmarket-configmap.yaml
+- sysmarket-secrets.yaml
+- sysmarket.yaml
+- sysmarket-service-8070.yaml
+- sysmarket-service-8072.yaml
