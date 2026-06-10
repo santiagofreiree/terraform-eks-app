@@ -6,7 +6,7 @@ resource "aws_route53_zone" "demo" {
   name = local.full_domain
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_acm_certificate" "demo" {
   validation_method = "DNS"
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 

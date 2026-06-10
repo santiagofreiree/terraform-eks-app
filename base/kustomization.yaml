@@ -1,3 +1,5 @@
 resources:
-- postgres
 - namespace.yaml
+- postgres
+- redis
+- sysmarket
