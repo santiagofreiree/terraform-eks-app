@@ -33,9 +33,11 @@ resource "aws_iam_policy" "alb_controller" {
           "ec2:DescribeTags",
           "ec2:GetCoipPoolUsage",
           "ec2:DescribeCoipPools",
+          "ec2:GetSecurityGroupsForVpc",
           "elasticloadbalancing:DescribeLoadBalancers",
           "elasticloadbalancing:DescribeLoadBalancerAttributes",
           "elasticloadbalancing:DescribeListeners",
+          "elasticloadbalancing:DescribeListenerAttributes",
           "elasticloadbalancing:DescribeListenerCertificates",
           "elasticloadbalancing:DescribeSSLPolicies",
           "elasticloadbalancing:DescribeRules",
@@ -131,7 +133,8 @@ resource "aws_iam_policy" "alb_controller" {
         Effect = "Allow"
         Action = [
           "elasticloadbalancing:CreateLoadBalancer",
-          "elasticloadbalancing:CreateTargetGroup"
+          "elasticloadbalancing:CreateTargetGroup",
+          "elasticloadbalancing:AddTags"
         ]
         Resource = "*"
         Condition = {
@@ -236,7 +239,7 @@ resource "aws_iam_role" "alb_controller" {
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
         StringEquals = {
-          "${local.oidc_provider}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+          "${local.oidc_provider}:sub" = "system:serviceaccount:aws-lb:aws-load-balancer-controller"
           "${local.oidc_provider}:aud" = "sts.amazonaws.com"
         }
       }

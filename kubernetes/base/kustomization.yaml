@@ -1,5 +1,6 @@
 resources:
 - namespace.yaml
+- ht-sysmarket.yaml
 - postgres
 - redis
 - sysmarket

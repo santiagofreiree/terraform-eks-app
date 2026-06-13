@@ -1,0 +1,10 @@
+apiVersion: gateway.k8s.aws/v1beta1
+kind: LoadBalancerConfiguration
+metadata:
+  name: public-alb
+  namespace: aws-lb
+spec:
+  scheme: internet-facing
+  loadBalancerName: aws-k8s-gateway
+  defaultTargetGroupConfiguration:
+    name: default-ip-targets
