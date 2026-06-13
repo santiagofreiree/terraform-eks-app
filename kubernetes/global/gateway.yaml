@@ -4,8 +4,8 @@ metadata:
   name: aws-gateway
   namespace: aws-lb
   annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
+#    alb.ingress.kubernetes.io/scheme: internet-facing
+#    alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/load-balancer-name: aws-k8s-gateway
 spec:
   gatewayClassName: alb
